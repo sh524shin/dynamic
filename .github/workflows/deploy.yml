@@ -24,15 +24,8 @@ jobs:
         run: npm run build
 
       - name: Log into OCI OCIR
-        uses: oracle-actions/login-ocir@v1
-        with:
-          auth_token: ${{ secrets.OCI_AUTH_TOKEN }}
-        env:
-          OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
-          OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
-          OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
-          OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
-          OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
+        run: |
+          echo "${{ secrets.OCI_AUTH_TOKEN }}" | docker login ${{ secrets.OCI_CLI_REGION }}.ocir.io -u ${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/${{ secrets.OCI_CLI_USER }} --password-stdin
 
       - name: Build and Push Docker Image
         run: |
