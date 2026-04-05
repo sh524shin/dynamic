@@ -31,7 +31,7 @@ const FormulaSection = () => {
     {
       title: "삼각함수의 정의 (단위원)",
       formula: "\\sin \\theta = y, \\quad \\cos \\theta = x, \\quad \\tan \\theta = \\frac{y}{x}",
-      description: "반지름이 1인 단위원 위를 움직이는 점 P(x, y)의 좌표를 통해 삼각함수를 정의합니다.",
+      description: "단위원 위를 도는 '각도를 나타내는 선(동경)'이 멈춘 점 P(x, y)의 좌표를 통해 정의합니다.",
       badge: "기초"
     },
     {
@@ -63,6 +63,12 @@ const FormulaSection = () => {
       formula: "\\sin(-\\theta) = -\\sin\\theta, \\quad \\cos(-\\theta) = \\cos\\theta",
       description: "함수의 주기성과 기함수/우함수 성질을 이용해 복잡한 각을 단순화합니다.",
       badge: "함수"
+    },
+    {
+      title: "삼각함수의 각 변환",
+      formula: "\\sin(\\frac{\pi}{2} \\pm \\theta) = \\cos \\theta, \\quad \\cos(\\frac{\pi}{2} \\pm \\theta) = \\mp \\sin \\theta",
+      description: "nπ/2 ± θ 꼴의 각을 변환하는 원리입니다. n이 홀수면 함수가 바뀌고(sin↔cos), 부호는 원래 함수가 속한 사분면을 따릅니다.",
+      badge: "중요"
     },
     {
       title: "삼각함수의 덧셈정리",
@@ -113,7 +119,7 @@ const FormulaSection = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-text-muted leading-relaxed">
             <div>
               <p className="font-bold text-neon-cyan mb-1">수학 I (공통)</p>
-              동경의 정의와 그래프의 주기성을 이해하는 것이 핵심입니다. 그래프 탭에서 주기에 따른 파동의 변화를 직접 눈으로 확인하며 계수의 역할을 익히세요.
+              **각도를 나타내는 선(동경)**의 위치와 그래프의 주기성을 이해하는 것이 핵심입니다. **각 변환** 시에는 '얼싸안코' 부호 결정과 n의 홀짝에 따른 함수 변화 법칙만 알면 모든 공식을 유도할 수 있습니다.
             </div>
             <div>
               <p className="font-bold text-neon-purple mb-1">미적분 (선택)</p>
