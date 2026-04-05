@@ -1,0 +1,57 @@
+name: Build and Deploy to OCI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Log into OCI OCIR
+        uses: oracle-actions/login-ocir@v1
+        with:
+          auth_token: ${{ secrets.OCI_AUTH_TOKEN }}
+        env:
+          OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
+          OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
+          OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
+          OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
+          OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t ${{ secrets.OCI_CLI_REGION }}.ocir.io/${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/math-web:latest .
+          docker push ${{ secrets.OCI_CLI_REGION }}.ocir.io/${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/math-web:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to OCI via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.INSTANCE_IP }}
+          username: opc
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "${{ secrets.OCI_AUTH_TOKEN }}" | docker login ${{ secrets.OCI_CLI_REGION }}.ocir.io -u ${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/${{ secrets.OCI_CLI_USER }} --password-stdin
+            docker stop math-web || true
+            docker rm math-web || true
+            docker pull ${{ secrets.OCI_CLI_REGION }}.ocir.io/${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/math-web:latest
+            docker run -d --name math-web -p 80:80 --restart always ${{ secrets.OCI_CLI_REGION }}.ocir.io/${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/math-web:latest
