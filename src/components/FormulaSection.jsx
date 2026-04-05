@@ -3,7 +3,7 @@ import { InlineMath, BlockMath } from 'react-katex';
 import { CheckCircle2, AlertTriangle, Book } from 'lucide-react';
 
 const FormulaCard = ({ title, formula, description, badge }) => (
-  <div className="glass p-8 flex flex-col gap-6 relative overflow-hidden group formula-card">
+  <div className="glass p-10 flex flex-col gap-6 relative overflow-visible group formula-card">
     <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors" />
     <div className="flex justify-between items-start relative z-10">
       <h3 className="text-2xl font-black text-white leading-tight">{title}</h3>
@@ -111,7 +111,7 @@ const FormulaSection = () => {
 
       <div className="glass p-10 border-l-8 border-l-primary bg-primary/5 mt-16 flex flex-col md:flex-row gap-6 relative overflow-hidden">
         <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-          <Book className="text-primary" size={180} />
+          <Book className="text-primary" size={100} />
         </div>
         <AlertTriangle className="text-primary flex-shrink-0" size={32} />
         <div className="relative z-10">

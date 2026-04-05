@@ -54,8 +54,8 @@ const SineGrapher = () => {
       labels.push(x.toFixed(1));
       const val = a * Math.sin(b * (x - offset) + c) + d;
       mainData.push(val);
-      glowData.push(val * 1.02); // Slightly outward
-      shadowData.push(val - 0.1); // Slightly sunken
+      glowData.push(val + 0.1); // Additive offset instead of multiplicative to stay within scale
+      shadowData.push(val - 0.1); 
     }
 
     return {
@@ -70,7 +70,6 @@ const SineGrapher = () => {
           pointRadius: 0,
           borderWidth: 4,
           fill: false,
-          z: 10
         },
         {
           label: 'Glow Echo',
@@ -99,13 +98,13 @@ const SineGrapher = () => {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: { duration: 0 }, // Disable default animation for performance
+    animation: { duration: 0 }, 
     scales: {
       y: {
-        min: -5,
-        max: 5,
+        min: -6, // Give slightly more room but fix it
+        max: 6,
         grid: { color: 'rgba(255, 255, 255, 0.02)' },
-        ticks: { color: '#64748b', font: { size: 10 } },
+        ticks: { color: '#64748b', font: { size: 10 }, stepSize: 1 },
       },
       x: {
         grid: { color: 'rgba(255, 255, 255, 0.02)' },
@@ -120,7 +119,7 @@ const SineGrapher = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div className="lg:col-span-2 glass p-8 aspect-video min-h-[400px] relative">
+      <div className="lg:col-span-2 glass p-8 h-[450px] relative">
         <div className="absolute top-4 right-8 flex items-center gap-2 z-20">
           <button 
             onClick={() => setIsAnimate(!isAnimate)}
