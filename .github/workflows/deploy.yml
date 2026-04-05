@@ -46,4 +46,4 @@ jobs:
             sudo docker stop math-web || true
             sudo docker rm math-web || true
             sudo docker pull ${{ secrets.OCI_CLI_REGION }}.ocir.io/${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/math-web:latest
-            sudo docker run -d --name math-web -p 80:80 --restart always ${{ secrets.OCI_CLI_REGION }}.ocir.io/${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/math-web:latest
+            sudo docker run -d --name math-web -p 127.0.0.1:8081:80 --restart always ${{ secrets.OCI_CLI_REGION }}.ocir.io/${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/math-web:latest
