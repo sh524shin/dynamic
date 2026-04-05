@@ -78,16 +78,12 @@ function App() {
                 </div>
               </div>
               
-              <div 
-                style={{ width: 'max-content' }}
-                className="relative mx-auto md:mx-0"
-              >
+              <div className="flex-1 pythagoras-hero-container">
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-[100px] animate-pulse" />
                 <img 
-                  style={{ width: '300px', height: 'auto' }}
                   src="/pythagoras.png" 
                   alt="Pythagoras AI Character" 
-                  className="relative z-10 drop-shadow-[0_20px_50px_rgba(99,102,241,0.3)] animate-fade"
+                  className="pythagoras-hero-image animate-fade"
                 />
               </div>
             </motion.div>
