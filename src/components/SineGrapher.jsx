@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,6 +8,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { InlineMath } from 'react-katex';
@@ -19,54 +20,33 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 const SineGrapher = () => {
+  const chartRef = useRef(null);
   const [a, setA] = useState(1);
   const [b, setB] = useState(1);
   const [c, setC] = useState(0);
   const [d, setD] = useState(0);
   const [isAnimate, setIsAnimate] = useState(true);
-  const [offset, setOffset] = useState(0);
+  
+  // High-performance state for animation (non-react state to avoid re-renders)
+  const animationState = useRef({ offset: 0 });
 
-  // Animation Loop for "Flow" Effect
-  useEffect(() => {
-    let animationFrame;
-    if (isAnimate) {
-      const animate = () => {
-        setOffset((prev) => (prev + 0.05) % (Math.PI * 2));
-        animationFrame = requestAnimationFrame(animate);
-      };
-      animationFrame = requestAnimationFrame(animate);
-    }
-    return () => cancelAnimationFrame(animationFrame);
-  }, [isAnimate]);
-
-  const generateData = () => {
+  // 1. Initial stable data structure
+  const initialData = useMemo(() => {
     const labels = [];
-    const mainData = [];
-    const glowData = [];
-    const shadowData = [];
-    
-    // Multi-layer for 3D Ribbon perception
     for (let x = -10; x <= 10; x += 0.2) {
       labels.push(x.toFixed(1));
-      // Clamp values strictly to prevent scale overflow
-      let val = a * Math.sin(b * (x - offset) + c) + d;
-      val = Math.max(-5.5, Math.min(5.5, val)); 
-      
-      mainData.push(val);
-      glowData.push(Math.min(5.8, val + 0.1)); 
-      shadowData.push(Math.max(-5.8, val - 0.1)); 
     }
-
     return {
       labels,
       datasets: [
         {
           label: 'Main Pulse',
-          data: mainData,
+          data: new Array(labels.length).fill(0),
           borderColor: '#00f3ff',
           backgroundColor: 'transparent',
           tension: 0.4,
@@ -76,7 +56,7 @@ const SineGrapher = () => {
         },
         {
           label: 'Glow Echo',
-          data: glowData,
+          data: new Array(labels.length).fill(0),
           borderColor: 'rgba(0, 243, 255, 0.2)',
           backgroundColor: 'transparent',
           tension: 0.4,
@@ -86,7 +66,7 @@ const SineGrapher = () => {
         },
         {
           label: '3D Shadow',
-          data: shadowData,
+          data: new Array(labels.length).fill(0),
           borderColor: 'rgba(99, 102, 241, 0.1)',
           backgroundColor: 'rgba(99, 102, 241, 0.05)',
           tension: 0.4,
@@ -96,18 +76,54 @@ const SineGrapher = () => {
         },
       ],
     };
-  };
+  }, []);
 
-  const options = {
+  // 2. Direct Update Animation Loop
+  useEffect(() => {
+    let animationFrame;
+    const updateChart = () => {
+      const chart = chartRef.current;
+      if (!chart) return;
+
+      if (isAnimate) {
+        animationState.current.offset = (animationState.current.offset + 0.05) % (Math.PI * 2);
+      }
+
+      const offset = animationState.current.offset;
+
+      // Update data directly on the chart instance
+      for (let i = 0; i < chart.data.labels.length; i++) {
+        const x = parseFloat(chart.data.labels[i]);
+        let val = a * Math.sin(b * (x - offset) + c) + d;
+        
+        // Hard Clamp to stay within view
+        val = Math.max(-6, Math.min(6, val));
+        
+        chart.data.datasets[0].data[i] = val;
+        chart.data.datasets[1].data[i] = Math.min(6.1, val + 0.1); // Slightly allow for glow layering
+        chart.data.datasets[2].data[i] = Math.max(-6.1, val - 0.1);
+      }
+
+      // Force fixed scale once more before updating
+      chart.options.scales.y.min = -6;
+      chart.options.scales.y.max = 6;
+      
+      chart.update('none'); // Update without animation/re-layout
+      animationFrame = requestAnimationFrame(updateChart);
+    };
+
+    animationFrame = requestAnimationFrame(updateChart);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [isAnimate, a, b, c, d]);
+
+  const options = useMemo(() => ({
     responsive: true,
     maintainAspectRatio: false,
-    animation: { duration: 0 }, 
+    animation: { duration: 0 },
     scales: {
       y: {
         min: -6,
         max: 6,
-        suggestedMin: -6,
-        suggestedMax: 6,
         afterDataLimits: (scale) => {
           scale.max = 6;
           scale.min = -6;
@@ -116,8 +132,9 @@ const SineGrapher = () => {
         ticks: { 
           color: '#64748b', 
           font: { size: 10 }, 
-          stepSize: 2,
-          precision: 0
+          stepSize: 1,
+          precision: 0,
+          callback: (value) => (Number.isInteger(value) ? value : null) 
         },
       },
       x: {
@@ -129,11 +146,11 @@ const SineGrapher = () => {
       legend: { display: false },
       tooltip: { enabled: false }
     },
-  };
+  }), []);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div className="lg:col-span-2 glass p-8 h-[450px] relative">
+      <div className="lg:col-span-2 glass p-8 h-[450px] relative overflow-hidden">
         <div className="absolute top-4 right-8 flex items-center gap-2 z-20">
           <button 
             onClick={() => setIsAnimate(!isAnimate)}
@@ -144,11 +161,13 @@ const SineGrapher = () => {
             {isAnimate ? '● LIVE' : '○ PAUSED'}
           </button>
         </div>
-        <Line data={generateData()} options={options} />
+        <div className="relative h-full w-full">
+          <Line ref={chartRef} data={initialData} options={options} />
+        </div>
       </div>
 
       <div className="glass p-8 space-y-8 h-full bg-slate-900/40">
-        <h3 className="text-2xl mb-6 font-black tracking-tight text-white">시각화 컨트롤</h3>
+        <h3 className="text-2xl mb-6 font-black tracking-tight text-white">시뮬레이션 조절</h3>
         
         <div className="space-y-8">
           <div className="slider-group group">

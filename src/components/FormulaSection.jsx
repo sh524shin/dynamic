@@ -1,23 +1,43 @@
 import React from 'react';
 import { InlineMath, BlockMath } from 'react-katex';
 import { CheckCircle2, AlertTriangle } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const FormulaCard = ({ title, formula, description, badge }) => (
-  <div className="glass p-10 flex flex-col gap-6 relative overflow-visible group formula-card">
-    <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors" />
-    <div className="flex justify-between items-start relative z-10">
-      <h3 className="text-2xl font-black text-white leading-tight">{title}</h3>
-      {badge && (
-        <span className="bg-gradient-to-r from-primary/20 to-purple-500/20 text-primary-glow text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-tighter border border-primary/20">
-          {badge}
-        </span>
-      )}
+  <motion.div
+    whileHover={{ scale: 1.03, y: -5 }}
+    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+    className="relative flex flex-col h-full group overflow-visible"
+  >
+    {/* Top Accent Bar */}
+    <div className="h-2 w-full bg-primary rounded-t-full relative z-30 shadow-[0_0_30px_rgba(99,102,241,0.8)] transition-all" />
+
+    <div
+      style={{ border: '2px solid #64748b', backgroundColor: '#131424', padding: '3rem' }}
+      className="flex flex-col gap-6 relative z-20 border-2 border-slate-500/50 bg-slate-900 shadow-[0_40px_100px_rgba(0,0,0,0.8)] group-hover:border-white/60 transition-all rounded-b-[32px] h-full shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
+    >
+      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-[80px] opacity-40 group-hover:opacity-70 transition-all" />
+
+      <div className="flex justify-between items-start relative z-10">
+        <h3 className="text-2xl font-black text-white leading-tight tracking-tight drop-shadow-lg">{title}</h3>
+        {badge && (
+          <span className="bg-slate-800 text-primary-glow text-[10px] px-3 py-1 rounded-md font-black uppercase tracking-widest border border-slate-500 shadow-xl">
+            {badge}
+          </span>
+        )}
+      </div>
+
+      <div className="relative z-10 bg-slate-900/60 p-8 rounded-2xl border border-white/10 shadow-inner my-2 flex items-center justify-center min-h-[140px] group-hover:bg-slate-900/80 transition-colors">
+        <div className="text-white scale-110 md:scale-125 origin-center text-center w-full drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]">
+          <BlockMath math={formula} />
+        </div>
+      </div>
+
+      <p className="text-slate-400 leading-relaxed text-base relative z-10 group-hover:text-white transition-colors pr-2">
+        {description}
+      </p>
     </div>
-    <div className="bg-white/5 p-10 rounded-[32px] border border-white/10 shadow-2xl backdrop-blur-md relative z-10">
-      <BlockMath math={formula} />
-    </div>
-    <p className="text-text-muted leading-relaxed text-sm relative z-10 group-hover:text-text-main transition-colors">{description}</p>
-  </div>
+  </motion.div>
 );
 
 const FormulaSection = () => {
@@ -97,13 +117,23 @@ const FormulaSection = () => {
   ];
 
   return (
-    <div className="space-y-12">
-      <div className="text-center">
-        <h2 className="text-4xl mb-4">핵심 공식 요약</h2>
-        <p className="text-text-muted">고등학교 수학 I 과정의 핵심 삼각함수 공식을 정리했습니다.</p>
+    <div className="space-y-20">
+      <div
+        style={{ marginBottom: '50px' }}
+        className="text-center"
+      >
+        <h2 className="text-4xl mb-6 font-black tracking-tighter text-white">핵심 공식 요약</h2>
+        <p className="text-text-muted text-lg max-w-2xl mx-auto">고등학교 수학 I 과정의 핵심 삼각함수 공식을 정리했습니다.</p>
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+          gap: '50px'
+        }}
+        className="grid grid-cols-1 md:grid-cols-2 gap-16"
+      >
         {formulas.map((f, i) => (
           <FormulaCard key={i} {...f} />
         ))}

@@ -50,40 +50,44 @@ function App() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="py-12 flex flex-col md:flex-row items-center justify-center gap-12"
+              className="py-6 md:py-12 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12"
             >
               <div className="flex-1 text-center md:text-left">
-                <h1 className="text-5xl md:text-7xl mb-6 leading-tight">
+                <h1 className="text-4xl md:text-7xl mb-4 md:mb-6 leading-tight">
                   <span className="text-transparent bg-clip-text bg-accent-gradient">삼각함수를</span><br />
                   직관적으로 마스터하세요.
                 </h1>
-                <p className="text-text-muted text-lg mb-12 max-w-2xl mx-auto md:mx-0">
+                <p className="text-text-muted text-base md:text-lg mb-8 md:mb-12 max-w-2xl mx-auto md:mx-0">
                   1 CPU, 1GB RAM에서도 부드럽게 작동하는 최첨단 수학 시각화 시스템.<br />
                   사인법칙부터 코사인법칙까지, 눈으로 보고 직접 조절하며 배우세요.
                 </p>
-                <div className="flex justify-center md:justify-start gap-6">
+                <div className="flex justify-center md:justify-start gap-4 md:gap-6">
                   <button
                     onClick={() => setActiveTab('simulator')}
-                    className="relative group px-10 py-5 overflow-hidden rounded-2xl bg-primary font-black text-lg transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(99,102,241,0.5)]"
+                    className="relative group px-8 md:px-10 py-4 md:py-5 overflow-hidden rounded-2xl bg-primary font-black text-base md:text-lg transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(99,102,241,0.5)]"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-primary to-purple-600 opacity-100 group-hover:scale-110 transition-transform" />
                     <span className="relative z-10 text-white">시뮬레이터 시작</span>
                   </button>
                   <button
                     onClick={() => setActiveTab('formulas')}
-                    className="glass px-10 py-5 text-lg font-black text-white hover:bg-white/10 transition-all border border-white/20 hover:border-white/40"
+                    className="glass px-8 md:px-10 py-4 md:py-5 text-base md:text-lg font-black text-white hover:bg-white/10 transition-all border border-white/20 hover:border-white/40"
                   >
                     공식 도감 보기
                   </button>
                 </div>
               </div>
               
-              <div className="flex-1 relative max-w-[280px] md:max-w-md w-full mx-auto">
+              <div 
+                style={{ width: 'max-content' }}
+                className="relative mx-auto md:mx-0"
+              >
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-[100px] animate-pulse" />
                 <img 
+                  style={{ width: '300px', height: 'auto' }}
                   src="/pythagoras.png" 
                   alt="Pythagoras AI Character" 
-                  className="relative z-10 w-full h-auto drop-shadow-[0_20px_50px_rgba(99,102,241,0.3)] animate-fade"
+                  className="relative z-10 drop-shadow-[0_20px_50px_rgba(99,102,241,0.3)] animate-fade"
                 />
               </div>
             </motion.div>
