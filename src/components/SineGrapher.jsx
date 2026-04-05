@@ -108,6 +108,10 @@ const SineGrapher = () => {
         max: 6,
         suggestedMin: -6,
         suggestedMax: 6,
+        afterDataLimits: (scale) => {
+          scale.max = 6;
+          scale.min = -6;
+        },
         grid: { color: 'rgba(255, 255, 255, 0.02)' },
         ticks: { 
           color: '#64748b', 

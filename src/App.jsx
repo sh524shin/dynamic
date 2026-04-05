@@ -78,7 +78,7 @@ function App() {
                 </div>
               </div>
               
-              <div className="flex-1 relative max-w-sm md:max-w-md w-full">
+              <div className="flex-1 relative max-w-[280px] md:max-w-md w-full mx-auto">
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-[100px] animate-pulse" />
                 <img 
                   src="/pythagoras.png" 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { InlineMath, BlockMath } from 'react-katex';
-import { CheckCircle2, AlertTriangle, Book } from 'lucide-react';
+import { CheckCircle2, AlertTriangle } from 'lucide-react';
 
 const FormulaCard = ({ title, formula, description, badge }) => (
   <div className="glass p-10 flex flex-col gap-6 relative overflow-visible group formula-card">
@@ -110,9 +110,6 @@ const FormulaSection = () => {
       </div>
 
       <div className="glass p-10 border-l-8 border-l-primary bg-primary/5 mt-16 flex flex-col md:flex-row gap-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-          <Book className="text-primary" size={100} />
-        </div>
         <AlertTriangle className="text-primary flex-shrink-0" size={32} />
         <div className="relative z-10">
           <h4 className="text-xl font-black text-white mb-4 tracking-tight">수학 I & 미적분 정복 전략</h4>
