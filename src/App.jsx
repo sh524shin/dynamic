@@ -16,26 +16,26 @@ function App() {
 
   return (
     <div className="min-h-screen">
-      {/* Navigation Bar */}
-      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-xl px-4">
-        <div className="glass px-6 py-4 flex justify-between items-center">
-          <div className="brand text-xl text-primary flex items-center gap-2">
-            <Calculator className="text-secondary" />
-            <span>MathAI</span>
+      {/* Navigation Bar - Modern Floating Pill */}
+      <nav className="fixed top-8 left-1/2 -translate-x-1/2 z-50 w-auto">
+        <div className="glass px-2 py-2 flex items-center gap-1 backdrop-blur-3xl shadow-2xl">
+          <div className="px-4 pr-6 border-r border-glass-stroke hidden md:flex items-center gap-2">
+            <Calculator className="text-neon-cyan" size={24} />
+            <span className="brand text-lg font-black tracking-tighter">MATH<span className="text-primary-glow">AI</span></span>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-1">
             {navItems.map(item => (
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className={`p-2 transition-all flex items-center gap-1.5 rounded-lg ${
+                className={`nav-pill flex items-center gap-2 ${
                   activeTab === item.id 
-                  ? 'bg-primary text-white shadow-lg shadow-indigo-500/30' 
+                  ? 'active' 
                   : 'text-text-muted hover:text-text-main'
                 }`}
               >
                 {item.icon}
-                <span className="hidden sm:inline font-semibold text-sm">{item.title}</span>
+                <span className="text-sm font-bold tracking-tight">{item.title}</span>
               </button>
             ))}
           </div>
@@ -58,18 +58,19 @@ function App() {
               </h1>
               <p className="text-text-muted text-lg mb-12 max-w-2xl mx-auto">
                 1 CPU, 1GB RAM에서도 부드럽게 작동하는 최첨단 수학 시각화 시스템.<br />
-                사인법칙부터 코수인법칙까지, 눈으로 보고 직접 조절하며 배우세요.
+                사인법칙부터 코사인법칙까지, 눈으로 보고 직접 조절하며 배우세요.
               </p>
-              <div className="flex justify-center gap-4">
+              <div className="flex justify-center gap-6">
                 <button
                   onClick={() => setActiveTab('simulator')}
-                  className="bg-primary text-white px-8 py-4 text-lg font-bold hover:scale-105"
+                  className="relative group px-10 py-5 overflow-hidden rounded-2xl bg-primary font-black text-lg transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(99,102,241,0.5)]"
                 >
-                  시뮬레이터 시작
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary to-purple-600 opacity-100 group-hover:scale-110 transition-transform" />
+                  <span className="relative z-10 text-white">시뮬레이터 시작</span>
                 </button>
                 <button
                   onClick={() => setActiveTab('formulas')}
-                  className="glass px-8 py-4 text-lg font-bold hover:bg-white/5"
+                  className="glass px-10 py-5 text-lg font-black text-white hover:bg-white/10 transition-all border border-white/20 hover:border-white/40"
                 >
                   공식 도감 보기
                 </button>

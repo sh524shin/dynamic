@@ -41,11 +41,12 @@ const SineGrapher = () => {
         {
           label: `y = ${a}sin(${b}x + ${c}) + ${d}`,
           data: data,
-          borderColor: '#6366f1',
-          backgroundColor: 'rgba(99, 102, 241, 0.5)',
+          borderColor: '#00f3ff', // Neon Cyan
+          backgroundColor: 'rgba(0, 243, 255, 0.1)',
           tension: 0.4,
           pointRadius: 0,
-          borderWidth: 3,
+          borderWidth: 4,
+          fill: true,
         },
       ],
     };
@@ -58,12 +59,12 @@ const SineGrapher = () => {
       y: {
         min: -5,
         max: 5,
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
-        ticks: { color: '#94a3b8' },
+        grid: { color: 'rgba(255, 255, 255, 0.03)' },
+        ticks: { color: '#64748b' },
       },
       x: {
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
-        ticks: { color: '#94a3b8' },
+        grid: { color: 'rgba(255, 255, 255, 0.03)' },
+        ticks: { color: '#64748b' },
       },
     },
     plugins: {
@@ -73,58 +74,65 @@ const SineGrapher = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div className="lg:col-span-2 glass p-6 aspect-video">
+      <div className="lg:col-span-2 glass p-8 aspect-video min-h-[400px]">
         <Line data={generateData()} options={options} />
       </div>
 
-      <div className="glass p-6 space-y-8 h-full bg-slate-900/50">
-        <h3 className="text-xl mb-4 text-secondary">파라미터 조절</h3>
+      <div className="glass p-8 space-y-8 h-full">
+        <h3 className="text-2xl mb-6 font-black tracking-tight text-white drop-shadow-sm">파라미터 조절</h3>
         
-        <div className="space-y-6">
-          <div className="slider-group">
-            <div className="flex justify-between text-sm mb-2">
-              <label>진폭 (a): {a}</label>
-              <InlineMath math="a \sin(bx+c)+d" />
+        <div className="space-y-8">
+          <div className="slider-group group">
+            <div className="flex justify-between items-center text-sm mb-3">
+              <label className="font-bold text-text-muted group-hover:text-neon-cyan transition-colors">진폭 (Amplitude): {a}</label>
+              <span className="opacity-50"><InlineMath math="a" /></span>
             </div>
             <input 
               type="range" min="0.1" max="3" step="0.1" value={a} 
               onChange={(e) => setA(parseFloat(e.target.value))}
-              className="w-full accent-primary h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer"
             />
           </div>
 
-          <div className="slider-group">
-            <label className="block text-sm mb-2">주기 (b): {b}</label>
+          <div className="slider-group group">
+            <div className="flex justify-between items-center text-sm mb-3">
+              <label className="font-bold text-text-muted group-hover:text-secondary transition-colors">주기 (Frequency): {b}</label>
+              <span className="opacity-50"><InlineMath math="b" /></span>
+            </div>
             <input 
               type="range" min="0.1" max="5" step="0.1" value={b} 
               onChange={(e) => setB(parseFloat(e.target.value))}
-              className="w-full accent-secondary h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer"
             />
           </div>
 
-          <div className="slider-group">
-            <label className="block text-sm mb-2">수평 이동 (c): {c}</label>
+          <div className="slider-group group">
+            <div className="flex justify-between items-center text-sm mb-3">
+              <label className="font-bold text-text-muted group-hover:text-accent transition-colors">수평 이동 (Phase): {c}</label>
+              <span className="opacity-50"><InlineMath math="c" /></span>
+            </div>
             <input 
               type="range" min="-3" max="3" step="0.1" value={c} 
               onChange={(e) => setC(parseFloat(e.target.value))}
-              className="w-full accent-indigo-400 h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer"
             />
           </div>
 
-          <div className="slider-group">
-            <label className="block text-sm mb-2">수직 이동 (d): {d}</label>
+          <div className="slider-group group">
+            <div className="flex justify-between items-center text-sm mb-3">
+              <label className="font-bold text-text-muted group-hover:text-white transition-colors">수직 이동 (Shift): {d}</label>
+              <span className="opacity-50"><InlineMath math="d" /></span>
+            </div>
             <input 
               type="range" min="-3" max="3" step="0.1" value={d} 
               onChange={(e) => setD(parseFloat(e.target.value))}
-              className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer"
             />
           </div>
         </div>
 
-        <div className="p-4 bg-primary/10 rounded-xl border border-primary/20 text-sm">
-          <p className="text-primary font-bold mb-1">Key Concept:</p>
-          주기(T) = <InlineMath math="\frac{2\pi}{|b|}" /> <br />
-          최댓값 = <InlineMath math="|a| + d" /> / 최솟값 = <InlineMath math="-|a| + d" />
+        <div className="p-5 bg-white/5 rounded-2xl border border-white/10 text-sm backdrop-blur-md">
+          <p className="text-secondary font-black mb-2 uppercase tracking-widest text-[10px]">Key Mathematical Concept</p>
+          <div className="space-y-2 text-text-muted">
+            <p>주기(T) = <InlineMath math="\frac{2\pi}{|b|}" /></p>
+            <p>치역 = <InlineMath math="[ -|a|+d, |a|+d ]" /></p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,15 +1,20 @@
 :root {
-  /* Modern Color Palette - Deep Indigo & Cyber Cyan */
+  /* Premium Dark Palette - Cyberpunk & Modern Fusion */
   --primary: #6366f1;
-  --primary-hover: #4f46e5;
+  --primary-glow: rgba(99, 102, 241, 0.5);
   --secondary: #06b6d4;
-  --bg-dark: #0f172a;
-  --bg-card: rgba(30, 41, 59, 0.7);
+  --secondary-glow: rgba(6, 182, 212, 0.4);
+  --accent: #f472b6;
+  --bg-dark: #020617; /* Deeper Dark */
+  --bg-card: rgba(15, 23, 42, 0.6);
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-stroke: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
+  --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  --neon-cyan: #00f3ff;
+  --neon-purple: #bc13fe;
 }
 
 * {
@@ -19,56 +24,128 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: var(--bg-dark);
   color: var(--text-main);
   min-height: 100vh;
   overflow-x: hidden;
-  background-image: 
-    radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 100% 100%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+  position: relative;
 }
 
-/* Glassmorphism Utility */
+/* Premium Mesh Gradient Background */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.2) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+  filter: blur(80px);
+  animation: meshMove 20s ease-in-out infinite alternate;
+}
+
+@keyframes meshMove {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1) translate(20px, 10px); }
+}
+
+/* Glassmorphism 2.0 */
 .glass {
   background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  border-radius: 20px;
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle Card Glow on Top Left */
+.glass::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 h1, h2, h3, .brand {
   font-family: 'Outfit', sans-serif;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  background: linear-gradient(to right, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1.5rem;
 }
 
-button {
+/* Custom Slick Slider Design */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  height: 6px;
+  border-radius: 10px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--primary);
+  border-radius: 50%;
   cursor: pointer;
-  border: none;
+  box-shadow: 0 0 10px var(--primary-glow);
+  transition: all 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+
+/* Interactive Nav Styling */
+.nav-pill {
+  padding: 0.6rem 1.2rem;
   border-radius: 12px;
-  transition: all 0.3s ease;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.math-content {
-  font-size: 1.1rem;
-  line-height: 1.6;
+.nav-pill:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.05);
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+.nav-pill.active {
+  background: var(--primary);
+  box-shadow: 0 4px 15px var(--primary-glow);
+  color: white;
 }
 
-.animate-fade {
-  animation: fadeIn 0.8s ease forwards;
+/* Mathematical Card Transitions */
+.formula-card {
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+}
+
+.formula-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.3);
+  border-color: rgba(99, 102, 241, 0.3);
 }

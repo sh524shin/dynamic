@@ -3,18 +3,20 @@ import { InlineMath, BlockMath } from 'react-katex';
 import { CheckCircle2, AlertTriangle } from 'lucide-react';
 
 const FormulaCard = ({ title, formula, description, badge }) => (
-  <div className="glass p-8 flex flex-col gap-4 relative overflow-hidden group">
-    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-      <CheckCircle2 size={120} className="text-secondary" />
+  <div className="glass p-8 flex flex-col gap-6 relative overflow-hidden group formula-card">
+    <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors" />
+    <div className="flex justify-between items-start relative z-10">
+      <h3 className="text-2xl font-black text-white leading-tight">{title}</h3>
+      {badge && (
+        <span className="bg-gradient-to-r from-primary/20 to-purple-500/20 text-primary-glow text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-tighter border border-primary/20">
+          {badge}
+        </span>
+      )}
     </div>
-    <div className="flex justify-between items-start">
-      <h3 className="text-2xl font-bold text-white mb-2">{title}</h3>
-      {badge && <span className="bg-secondary/20 text-secondary text-xs px-2 py-1 rounded-full font-bold uppercase">{badge}</span>}
-    </div>
-    <div className="bg-white/5 p-8 rounded-2xl border border-white/10 shadow-inner">
+    <div className="bg-white/5 p-10 rounded-[32px] border border-white/10 shadow-2xl backdrop-blur-md relative z-10">
       <BlockMath math={formula} />
     </div>
-    <p className="text-text-muted leading-relaxed">{description}</p>
+    <p className="text-text-muted leading-relaxed text-sm relative z-10 group-hover:text-text-main transition-colors">{description}</p>
   </div>
 );
 
