@@ -52,10 +52,13 @@ const SineGrapher = () => {
     // Multi-layer for 3D Ribbon perception
     for (let x = -10; x <= 10; x += 0.2) {
       labels.push(x.toFixed(1));
-      const val = a * Math.sin(b * (x - offset) + c) + d;
+      // Clamp values strictly to prevent scale overflow
+      let val = a * Math.sin(b * (x - offset) + c) + d;
+      val = Math.max(-5.5, Math.min(5.5, val)); 
+      
       mainData.push(val);
-      glowData.push(val + 0.1); // Additive offset instead of multiplicative to stay within scale
-      shadowData.push(val - 0.1); 
+      glowData.push(Math.min(5.8, val + 0.1)); 
+      shadowData.push(Math.max(-5.8, val - 0.1)); 
     }
 
     return {
@@ -101,10 +104,17 @@ const SineGrapher = () => {
     animation: { duration: 0 }, 
     scales: {
       y: {
-        min: -6, // Give slightly more room but fix it
+        min: -6,
         max: 6,
+        suggestedMin: -6,
+        suggestedMax: 6,
         grid: { color: 'rgba(255, 255, 255, 0.02)' },
-        ticks: { color: '#64748b', font: { size: 10 }, stepSize: 1 },
+        ticks: { 
+          color: '#64748b', 
+          font: { size: 10 }, 
+          stepSize: 2,
+          precision: 0
+        },
       },
       x: {
         grid: { color: 'rgba(255, 255, 255, 0.02)' },
