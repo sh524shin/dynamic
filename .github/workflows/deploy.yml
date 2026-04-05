@@ -42,8 +42,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo "${{ secrets.OCI_AUTH_TOKEN }}" | docker login ${{ secrets.OCI_CLI_REGION }}.ocir.io -u ${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/${{ secrets.OCI_USERNAME }} --password-stdin
-            docker stop math-web || true
-            docker rm math-web || true
-            docker pull ${{ secrets.OCI_CLI_REGION }}.ocir.io/${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/math-web:latest
-            docker run -d --name math-web -p 80:80 --restart always ${{ secrets.OCI_CLI_REGION }}.ocir.io/${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/math-web:latest
+            echo "${{ secrets.OCI_AUTH_TOKEN }}" | sudo docker login ${{ secrets.OCI_CLI_REGION }}.ocir.io -u ${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/${{ secrets.OCI_USERNAME }} --password-stdin
+            sudo docker stop math-web || true
+            sudo docker rm math-web || true
+            sudo docker pull ${{ secrets.OCI_CLI_REGION }}.ocir.io/${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/math-web:latest
+            sudo docker run -d --name math-web -p 80:80 --restart always ${{ secrets.OCI_CLI_REGION }}.ocir.io/${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/math-web:latest
