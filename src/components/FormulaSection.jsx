@@ -1,6 +1,6 @@
 import React from 'react';
 import { InlineMath, BlockMath } from 'react-katex';
-import { CheckCircle2, AlertTriangle } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, Book } from 'lucide-react';
 
 const FormulaCard = ({ title, formula, description, badge }) => (
   <div className="glass p-8 flex flex-col gap-6 relative overflow-hidden group formula-card">
@@ -23,27 +23,70 @@ const FormulaCard = ({ title, formula, description, badge }) => (
 const FormulaSection = () => {
   const formulas = [
     {
+      title: "부채꼴의 호와 넓이",
+      formula: "l = r\\theta, \\quad S = \\frac{1}{2}r^2\\theta = \\frac{1}{2}rl",
+      description: "반지름 r, 중심각 θ(라디안)인 부채꼴에서 호의 길이 l과 넓이 S를 구하는 공식입니다.",
+      badge: "기하"
+    },
+    {
+      title: "삼각함수의 정의 (단위원)",
+      formula: "\\sin \\theta = y, \\quad \\cos \\theta = x, \\quad \\tan \\theta = \\frac{y}{x}",
+      description: "반지름이 1인 단위원 위를 움직이는 점 P(x, y)의 좌표를 통해 삼각함수를 정의합니다.",
+      badge: "기초"
+    },
+    {
       title: "사인 법칙 (Law of Sines)",
       formula: "\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C} = 2R",
-      description: "삼각형 ABC의 세 변의 길이 a, b, c와 그 대각 A, B, C 및 외접원의 반지름 R 사이의 관계입니다. 삼각형의 외접원 반지름을 구할 때 유용합니다.",
+      description: "삼각형의 변의 길이와 그 대각의 사인값, 외접원의 반지름 R 사이의 관계입니다.",
       badge: "중요"
     },
     {
       title: "코사인 법칙 (Law of Cosines)",
       formula: "a^2 = b^2 + c^2 - 2bc \\cos A",
-      description: "삼각형의 두 변의 길이와 그 끼인각을 알 때, 제3의 변의 길이를 구하는 공식입니다. 피타고라스 정리의 일반화 버전으로 이해할 수 있습니다.",
+      description: "두 변의 길이와 그 끼인각을 알 때 제3의 변을 구하는 피타고라스 정리의 확장판입니다.",
       badge: "중요"
     },
     {
       title: "삼각형의 넓이",
       formula: "S = \\frac{1}{2}bc \\sin A",
-      description: "두 변의 길이와 그 끼인각을 알 때 삼각형의 넓이를 구하는 가장 직관적인 방법입니다.",
+      description: "두 변과 끼인각을 활용하여 삼각형의 넓이를 가장 효율적으로 구합니다.",
+      badge: "기하"
     },
     {
       title: "삼각함수의 성질",
-      formula: "\\sin^2 \\theta + \\cos^2 \\theta = 1",
-      description: "어떤 각도 θ에 대해서도 사인 제곱과 코사인 제곱의 합은 항상 1입니다. 삼각함수 문제 풀이의 가장 기본이 되는 항등식입니다.",
+      formula: "\\sin^2 \\theta + \\cos^2 \\theta = 1, \\quad \\tan \\theta = \\frac{\\sin \\theta}{\\cos \\theta}",
+      description: "삼각함수 사이의 가장 기본적인 대수적 관계식들입니다.",
       badge: "기초"
+    },
+    {
+      title: "주기와 대칭성",
+      formula: "\\sin(-\\theta) = -\\sin\\theta, \\quad \\cos(-\\theta) = \\cos\\theta",
+      description: "함수의 주기성과 기함수/우함수 성질을 이용해 복잡한 각을 단순화합니다.",
+      badge: "함수"
+    },
+    {
+      title: "삼각함수의 덧셈정리",
+      formula: "\\sin(\\alpha \\pm \\beta) = \\sin\\alpha\\cos\\beta \\pm \\cos\\alpha\\sin\\beta",
+      description: "두 각의 합이나 차에 대한 삼각함수 값을 구하는 미적분의 핵심 공식입니다.",
+      badge: "미적분"
+    },
+    {
+      title: "배각 공식 (Double Angle)",
+      formula: "\\sin 2\\alpha = 2\\sin\\alpha\\cos\\alpha, \\quad \\cos 2\\alpha = \\cos^2\\alpha - \\sin^2\\alpha",
+      description: "덧셈정리에서 파생된 공식으로, 각을 두 배로 키우거나 절반으로 줄일 때 사용합니다.",
+      badge: "미적분"
+    },
+    {
+      title: "삼각함수의 미분",
+      formula: "(\\sin x)' = \\cos x, \\quad (\\cos x)' = -\\sin x, \\quad (\\tan x)' = \\sec^2 x",
+      description: "각 함수들의 변화율을 정의합니다. 'co'로 시작하는 함수군을 미분하면 음수(-)가 붙습니다.",
+      badge: "미적분"
+    },
+    {
+      title: "삼각함수의 적분",
+      formula: "\\int \\sin x dx = -\\cos x + C, \\quad \\int \\cos x dx = \\sin x + C",
+      description: "삼각함수의 부정적분 공식입니다. 미분의 역과정임을 기억하세요.",
+      badge: "미적분"
     },
   ];
 
@@ -60,11 +103,23 @@ const FormulaSection = () => {
         ))}
       </div>
 
-      <div className="glass p-8 border-l-4 border-l-yellow-500 bg-yellow-500/5 mt-12 flex gap-4">
-        <AlertTriangle className="text-yellow-500 flex-shrink-0" />
-        <div>
-          <h4 className="font-bold text-yellow-500 mb-2">암기 팁</h4>
-          <p className="text-sm text-text-muted">공식을 그냥 외우는 것보다 삼각형을 그려보며 변과 각의 관계를 시각화하는 것이 훨씬 효과적입니다. 위 시뮬레이터 탭에서 주기에 따른 변화를 먼저 익혀보세요.</p>
+      <div className="glass p-10 border-l-8 border-l-primary bg-primary/5 mt-16 flex flex-col md:flex-row gap-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+          <Book className="text-primary" size={180} />
+        </div>
+        <AlertTriangle className="text-primary flex-shrink-0" size={32} />
+        <div className="relative z-10">
+          <h4 className="text-xl font-black text-white mb-4 tracking-tight">수학 I & 미적분 정복 전략</h4>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-text-muted leading-relaxed">
+            <div>
+              <p className="font-bold text-neon-cyan mb-1">수학 I (공통)</p>
+              동경의 정의와 그래프의 주기성을 이해하는 것이 핵심입니다. 그래프 탭에서 주기에 따른 파동의 변화를 직접 눈으로 확인하며 계수의 역할을 익히세요.
+            </div>
+            <div>
+              <p className="font-bold text-neon-purple mb-1">미적분 (선택)</p>
+              덧셈정리는 모든 미분/적분 공식의 시작입니다. 공식을 유도해 보며 각 함수 사이의 관계를 파악하면 고난도 배각/반각 공식을 더 쉽게 기억할 수 있습니다.
+            </div>
+          </div>
         </div>
       </div>
     </div>
