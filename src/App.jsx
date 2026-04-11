@@ -171,34 +171,43 @@ const TetrisInternal = () => {
   return (
     <div key={VERSION} className="flex flex-col w-full select-none" style={{ height: 'calc(100dvh - 56px)' }}>
 
-      {/* SCORE BAR — 3-column grid, always stable */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', height: '44px', flexShrink: 0, padding: '0 12px', backgroundColor: 'rgba(15,23,42,0.85)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+      {/* SCORE BAR — Optimized for narrow screens */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'minmax(70px, 1fr) auto minmax(70px, 1fr)',
+        alignItems: 'center',
+        height: '44px',
+        flexShrink: 0,
+        padding: '0 8px',
+        backgroundColor: 'rgba(15,23,42,0.95)',
+        borderBottom: '1px solid rgba(255,255,255,0.05)'
+      }}>
         {/* Left: current score + level */}
-        <div className="flex items-center gap-2">
-          <span className="text-[9px] font-black text-text-muted tracking-widest uppercase">SCORE</span>
-          <span className="text-base font-black text-white tabular-nums">{state.score.toLocaleString()}</span>
-          <span className="text-[9px] font-black text-text-muted tracking-widest uppercase ml-1">LVL</span>
-          <span className="text-base font-black text-neon-cyan tabular-nums">{state.level ?? 1}</span>
+        <div className="flex items-center gap-1.5 overflow-hidden">
+          <span className="text-[8px] font-black text-text-muted uppercase">SC</span>
+          <span className="text-sm font-black text-white tabular-nums">{state.score.toLocaleString()}</span>
+          <span className="text-[8px] font-black text-text-muted uppercase ml-0.5">LV</span>
+          <span className="text-sm font-black text-neon-cyan tabular-nums">{state.level ?? 1}</span>
         </div>
 
-        {/* Center: best score (always rendered, empty when no scores) */}
-        <div>
+        {/* Center: best score badge (more compact) */}
+        <div className="flex justify-center">
           {highScores.length > 0 && (
-            <div className="flex items-center gap-1.5 px-2 py-1 bg-yellow-400/10 border border-yellow-400/30 rounded-lg">
-              <span style={{ fontSize: '11px' }}>🏆</span>
-              <span className="text-[9px] font-black text-yellow-400 uppercase">{highScores[0].name}</span>
-              <span className="text-[10px] font-black text-yellow-300 tabular-nums">{highScores[0].score.toLocaleString()}</span>
+            <div className="flex items-center gap-1 px-1.5 py-0.5 bg-yellow-400/10 border border-yellow-400/30 rounded-lg max-w-[120px]">
+              <span style={{ fontSize: '10px' }}>🏆</span>
+              <span className="text-[8px] font-black text-yellow-400 uppercase truncate">{highScores[0].name}</span>
+              <span className="text-[9px] font-black text-yellow-300 tabular-nums">{highScores[0].score.toLocaleString()}</span>
             </div>
           )}
         </div>
 
         {/* Right: pause + reset */}
-        <div className="flex items-center gap-2 justify-end">
-          <button onClick={() => dispatch({ type: 'PAUSE' })} className="p-1.5 bg-white/5 border border-white/10 rounded-lg text-white hover:bg-white/10 transition-all">
-            {state.isPaused ? <Play size={16} className="fill-white" /> : <Pause size={16} className="fill-white" />}
+        <div className="flex items-center gap-1.5 justify-end">
+          <button onClick={() => dispatch({ type: 'PAUSE' })} className="p-1.5 bg-white/5 border border-white/10 rounded-lg text-white active:bg-white/20 transition-all">
+            {state.isPaused ? <Play size={15} className="fill-white" /> : <Pause size={15} className="fill-white" />}
           </button>
-          <button onClick={() => dispatch({ type: 'RESET' })} className="p-1.5 bg-white/5 border border-white/10 rounded-lg text-white hover:bg-white/10 transition-all">
-            <RotateCcw size={16} />
+          <button onClick={() => dispatch({ type: 'RESET' })} className="p-1.5 bg-white/5 border border-white/10 rounded-lg text-white active:bg-white/20 transition-all">
+            <RotateCcw size={15} />
           </button>
         </div>
       </div>
@@ -283,27 +292,27 @@ const TetrisInternal = () => {
         </div>
       </div>
 
-      {/* BUTTON ROW — enlarged for mobile accessibility */}
-      <div className="flex items-center justify-center gap-2 px-2 bg-slate-900/60 border-t border-white/5" style={{ height: '120px', flexShrink: 0 }}>
-        <button onClick={() => dispatch({ type: 'ROTATE' })} className="flex flex-col items-center gap-1.5 flex-1 h-[100px] bg-slate-800 border-2 border-neon-purple/70 rounded-2xl text-neon-purple shadow-[0_0_12px_rgba(188,19,254,0.3)] active:scale-95 transition-all justify-center">
-          <RotateCcw size={32} />
-          <span className="text-[10px] font-black uppercase">ROTATE</span>
+      {/* BUTTON ROW — forced single row with gap reduction */}
+      <div className="flex flex-nowrap items-center justify-center gap-1 px-1 bg-slate-900/60 border-t border-white/5" style={{ height: '120px', flexShrink: 0 }}>
+        <button onClick={() => dispatch({ type: 'ROTATE' })} className="flex flex-col items-center gap-1 flex-1 min-w-0 h-[100px] bg-slate-800 border-2 border-neon-purple/70 rounded-2xl text-neon-purple shadow-[0_0_12px_rgba(188,19,254,0.3)] active:scale-95 transition-all justify-center px-0">
+          <RotateCcw size={28} />
+          <span className="text-[9px] font-black uppercase truncate w-full text-center">ROTATE</span>
         </button>
-        <button onClick={() => dispatch({ type: 'MOVE', dx: -1, dy: 0 })} className="flex flex-col items-center gap-1.5 flex-1 h-[100px] bg-slate-800 border-2 border-neon-cyan/70 rounded-2xl text-neon-cyan shadow-[0_0_12px_rgba(0,243,255,0.3)] active:scale-95 transition-all justify-center">
-          <ArrowLeft size={32} />
-          <span className="text-[10px] font-black uppercase">LEFT</span>
+        <button onClick={() => dispatch({ type: 'MOVE', dx: -1, dy: 0 })} className="flex flex-col items-center gap-1 flex-1 min-w-0 h-[100px] bg-slate-800 border-2 border-neon-cyan/70 rounded-2xl text-neon-cyan shadow-[0_0_12px_rgba(0,243,255,0.3)] active:scale-95 transition-all justify-center px-0">
+          <ArrowLeft size={28} />
+          <span className="text-[9px] font-black uppercase truncate w-full text-center">LEFT</span>
         </button>
-        <button onClick={() => dispatch({ type: 'MOVE', dx: 1, dy: 0 })} className="flex flex-col items-center gap-1.5 flex-1 h-[100px] bg-slate-800 border-2 border-neon-cyan/70 rounded-2xl text-neon-cyan shadow-[0_0_12px_rgba(0,243,255,0.3)] active:scale-95 transition-all justify-center">
-          <ArrowRight size={32} />
-          <span className="text-[10px] font-black uppercase">RIGHT</span>
+        <button onClick={() => dispatch({ type: 'MOVE', dx: 1, dy: 0 })} className="flex flex-col items-center gap-1 flex-1 min-w-0 h-[100px] bg-slate-800 border-2 border-neon-cyan/70 rounded-2xl text-neon-cyan shadow-[0_0_12px_rgba(0,243,255,0.3)] active:scale-95 transition-all justify-center px-0">
+          <ArrowRight size={28} />
+          <span className="text-[9px] font-black uppercase truncate w-full text-center">RIGHT</span>
         </button>
-        <button onClick={() => dispatch({ type: 'MOVE', dx: 0, dy: 1 })} className="flex flex-col items-center gap-1.5 flex-1 h-[100px] bg-slate-800 border-2 border-neon-cyan/70 rounded-2xl text-neon-cyan shadow-[0_0_12px_rgba(0,243,255,0.3)] active:scale-95 transition-all justify-center">
-          <ArrowDown size={32} />
-          <span className="text-[10px] font-black uppercase">SOFT</span>
+        <button onClick={() => dispatch({ type: 'MOVE', dx: 0, dy: 1 })} className="flex flex-col items-center gap-1 flex-1 min-w-0 h-[100px] bg-slate-800 border-2 border-neon-cyan/70 rounded-2xl text-neon-cyan shadow-[0_0_12px_rgba(0,243,255,0.3)] active:scale-95 transition-all justify-center px-0">
+          <ArrowDown size={28} />
+          <span className="text-[9px] font-black uppercase truncate w-full text-center">SOFT</span>
         </button>
-        <button onClick={() => dispatch({ type: 'HARD_DROP' })} className="flex flex-col items-center gap-1.5 flex-1 h-[100px] bg-slate-800 border-2 border-yellow-400/70 rounded-2xl text-yellow-400 shadow-[0_0_12px_rgba(250,204,21,0.3)] active:scale-95 transition-all justify-center">
-          <ChevronsDown size={32} />
-          <span className="text-[10px] font-black uppercase">HARD</span>
+        <button onClick={() => dispatch({ type: 'HARD_DROP' })} className="flex flex-col items-center gap-1 flex-1 min-w-0 h-[100px] bg-slate-800 border-2 border-yellow-400/70 rounded-2xl text-yellow-400 shadow-[0_0_12px_rgba(250,204,21,0.3)] active:scale-95 transition-all justify-center px-0">
+          <ChevronsDown size={28} />
+          <span className="text-[9px] font-black uppercase truncate w-full text-center">HARD</span>
         </button>
       </div>
     </div>
