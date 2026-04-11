@@ -165,8 +165,8 @@ const TetrisInternal = () => {
     ));
   };
 
-  // nav=56px mobile / 64px desktop, score-bar=44px, btn-row=76px
-  const CELL = `min(calc((100vw - 12px) / 10), calc((100dvh - 176px) / 20))`;
+  // nav=56px mobile / 64px desktop, score-bar=44px, btn-row=120px
+  const CELL = `min(calc((100vw - 12px) / 10), calc((100dvh - 220px) / 20))`;
 
   return (
     <div key={VERSION} className="flex flex-col w-full select-none" style={{ height: 'calc(100dvh - 56px)' }}>
@@ -283,27 +283,27 @@ const TetrisInternal = () => {
         </div>
       </div>
 
-      {/* BUTTON ROW — fixed height at bottom */}
-      <div className="flex items-center justify-center gap-2 px-2 bg-slate-900/60 border-t border-white/5" style={{ height: '76px', flexShrink: 0 }}>
-        <button onClick={() => dispatch({ type: 'ROTATE' })} className="flex flex-col items-center gap-1 flex-1 h-14 bg-slate-800 border-2 border-neon-purple/70 rounded-2xl text-neon-purple shadow-[0_0_12px_rgba(188,19,254,0.3)] active:scale-95 transition-all justify-center">
-          <RotateCcw size={22} />
-          <span className="text-[8px] font-black uppercase">ROTATE</span>
+      {/* BUTTON ROW — enlarged for mobile accessibility */}
+      <div className="flex items-center justify-center gap-2 px-2 bg-slate-900/60 border-t border-white/5" style={{ height: '120px', flexShrink: 0 }}>
+        <button onClick={() => dispatch({ type: 'ROTATE' })} className="flex flex-col items-center gap-1.5 flex-1 h-[100px] bg-slate-800 border-2 border-neon-purple/70 rounded-2xl text-neon-purple shadow-[0_0_12px_rgba(188,19,254,0.3)] active:scale-95 transition-all justify-center">
+          <RotateCcw size={32} />
+          <span className="text-[10px] font-black uppercase">ROTATE</span>
         </button>
-        <button onClick={() => dispatch({ type: 'MOVE', dx: -1, dy: 0 })} className="flex flex-col items-center gap-1 flex-1 h-14 bg-slate-800 border-2 border-neon-cyan/70 rounded-2xl text-neon-cyan shadow-[0_0_12px_rgba(0,243,255,0.3)] active:scale-95 transition-all justify-center">
-          <ArrowLeft size={22} />
-          <span className="text-[8px] font-black uppercase">LEFT</span>
+        <button onClick={() => dispatch({ type: 'MOVE', dx: -1, dy: 0 })} className="flex flex-col items-center gap-1.5 flex-1 h-[100px] bg-slate-800 border-2 border-neon-cyan/70 rounded-2xl text-neon-cyan shadow-[0_0_12px_rgba(0,243,255,0.3)] active:scale-95 transition-all justify-center">
+          <ArrowLeft size={32} />
+          <span className="text-[10px] font-black uppercase">LEFT</span>
         </button>
-        <button onClick={() => dispatch({ type: 'MOVE', dx: 1, dy: 0 })} className="flex flex-col items-center gap-1 flex-1 h-14 bg-slate-800 border-2 border-neon-cyan/70 rounded-2xl text-neon-cyan shadow-[0_0_12px_rgba(0,243,255,0.3)] active:scale-95 transition-all justify-center">
-          <ArrowRight size={22} />
-          <span className="text-[8px] font-black uppercase">RIGHT</span>
+        <button onClick={() => dispatch({ type: 'MOVE', dx: 1, dy: 0 })} className="flex flex-col items-center gap-1.5 flex-1 h-[100px] bg-slate-800 border-2 border-neon-cyan/70 rounded-2xl text-neon-cyan shadow-[0_0_12px_rgba(0,243,255,0.3)] active:scale-95 transition-all justify-center">
+          <ArrowRight size={32} />
+          <span className="text-[10px] font-black uppercase">RIGHT</span>
         </button>
-        <button onClick={() => dispatch({ type: 'MOVE', dx: 0, dy: 1 })} className="flex flex-col items-center gap-1 flex-1 h-14 bg-slate-800 border-2 border-neon-cyan/70 rounded-2xl text-neon-cyan shadow-[0_0_12px_rgba(0,243,255,0.3)] active:scale-95 transition-all justify-center">
-          <ArrowDown size={22} />
-          <span className="text-[8px] font-black uppercase">SOFT</span>
+        <button onClick={() => dispatch({ type: 'MOVE', dx: 0, dy: 1 })} className="flex flex-col items-center gap-1.5 flex-1 h-[100px] bg-slate-800 border-2 border-neon-cyan/70 rounded-2xl text-neon-cyan shadow-[0_0_12px_rgba(0,243,255,0.3)] active:scale-95 transition-all justify-center">
+          <ArrowDown size={32} />
+          <span className="text-[10px] font-black uppercase">SOFT</span>
         </button>
-        <button onClick={() => dispatch({ type: 'HARD_DROP' })} className="flex flex-col items-center gap-1 flex-1 h-14 bg-slate-800 border-2 border-yellow-400/70 rounded-2xl text-yellow-400 shadow-[0_0_12px_rgba(250,204,21,0.3)] active:scale-95 transition-all justify-center">
-          <ChevronsDown size={22} />
-          <span className="text-[8px] font-black uppercase">HARD</span>
+        <button onClick={() => dispatch({ type: 'HARD_DROP' })} className="flex flex-col items-center gap-1.5 flex-1 h-[100px] bg-slate-800 border-2 border-yellow-400/70 rounded-2xl text-yellow-400 shadow-[0_0_12px_rgba(250,204,21,0.3)] active:scale-95 transition-all justify-center">
+          <ChevronsDown size={32} />
+          <span className="text-[10px] font-black uppercase">HARD</span>
         </button>
       </div>
     </div>
