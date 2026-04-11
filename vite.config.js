@@ -10,6 +10,9 @@ export default defineConfig({
     },
     strictPort: true,
     port: 5173,
+    proxy: {
+      '/api': 'http://localhost:80'
+    }
   },
   build: {
     sourcemap: false,

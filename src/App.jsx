@@ -102,22 +102,42 @@ const TetrisInternal = () => {
   const stateRef = useRef(state);
   useEffect(() => { stateRef.current = state; }, [state]);
 
-  // --- HIGH SCORE ---
-  const [highScores, setHighScores] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('tetris-hiscores') || '[]'); }
-    catch { return []; }
-  });
+  // --- GLOBAL HIGH SCORE ---
+  const [highScores, setHighScores] = useState([]);
   const [nameInput, setNameInput] = useState('');
+
+  const fetchScores = async () => {
+    try {
+      const res = await fetch('/api/scores');
+      if (res.ok) {
+        const data = await res.json();
+        setHighScores(data);
+      }
+    } catch (e) {
+      console.error('Failed to fetch global scores:', e);
+    }
+  };
+
+  useEffect(() => {
+    fetchScores();
+  }, []);
+
   const isNewHigh = state.isGameOver && state.score > 0 &&
     (highScores.length < 5 || state.score > (highScores[highScores.length - 1]?.score ?? 0));
 
-  const submitScore = () => {
+  const submitScore = async () => {
     const name = nameInput.trim().slice(0, 12);
     if (name) {
-      const updated = [...highScores, { name, score: state.score }]
-        .sort((a, b) => b.score - a.score).slice(0, 5);
-      setHighScores(updated);
-      localStorage.setItem('tetris-hiscores', JSON.stringify(updated));
+      try {
+        await fetch('/api/scores', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, score: state.score })
+        });
+        await fetchScores(); // Refresh leaderboard
+      } catch (e) {
+        console.error('Failed to submit score:', e);
+      }
     }
     setNameInput('');
     dispatch({ type: 'RESET' });
