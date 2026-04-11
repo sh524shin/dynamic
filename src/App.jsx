@@ -1,6 +1,7 @@
 import React, { useState, useReducer, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calculator, Book, Activity, Home, Gamepad2, Play, Pause, RotateCcw, Trophy, ArrowRight, ArrowDown, ArrowLeft, ChevronsDown } from 'lucide-react';
+import { io } from 'socket.io-client';
 import { InlineMath, BlockMath } from 'react-katex';
 import SineGrapher from './components/SineGrapher';
 import FormulaSection from './components/FormulaSection';
@@ -120,6 +121,19 @@ const TetrisInternal = () => {
 
   useEffect(() => {
     fetchScores();
+
+    // --- REAL-TIME UPDATES ---
+    // Connect to the same host that served the page
+    const socket = io();
+    
+    socket.on('scoreUpdated', () => {
+      console.log('Leaderboard update received via socket!');
+      fetchScores();
+    });
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   const isNewHigh = state.isGameOver && state.score > 0 &&

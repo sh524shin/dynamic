@@ -3,11 +3,21 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import sqlite3 from 'sqlite3';
 import cors from 'cors';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*", // Adjust this for production security
+    methods: ["GET", "POST"]
+  }
+});
+
 const PORT = process.env.PORT || 80;
 
 app.use(cors());
@@ -33,6 +43,14 @@ db.run(`
   )
 `);
 
+// --- SOCKET.IO HANDLING ---
+io.on('connection', (socket) => {
+  console.log('A user connected:', socket.id);
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
+
 // --- API ENDPOINTS ---
 
 // GET: Fetch top 10 high scores
@@ -50,23 +68,26 @@ app.post('/api/scores', (req, res) => {
     return res.status(400).json({ error: 'Name and score are required' });
   }
 
-  // Basic anti-cheat/limit: only save if score > 0
   if (score <= 0) return res.json({ success: true, message: 'Score too low' });
 
   const stmt = db.prepare('INSERT INTO high_scores (name, score) VALUES (?, ?)');
   stmt.run(name, score, function(err) {
     if (err) return res.status(500).json({ error: err.message });
+    
+    // BROADCAST UPDATE TO ALL CLIENTS
+    io.emit('scoreUpdated');
+    
     res.json({ success: true, id: this.lastID });
   });
   stmt.finalize();
 });
 
-// Catch-all: serve index.html for Client Side Routing (CSR)
-// We use a middleware at the end to catch everything not handled by static or API
+// Catch-all: serve index.html for CSR
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Start the server using httpServer instead of app.listen
+httpServer.listen(PORT, () => {
+  console.log(`Real-time server is running on port ${PORT}`);
 });

@@ -11,7 +11,11 @@ export default defineConfig({
     strictPort: true,
     port: 5173,
     proxy: {
-      '/api': 'http://localhost:80'
+      '/api': 'http://localhost:80',
+      '/socket.io': {
+        target: 'http://localhost:80',
+        ws: true
+      }
     }
   },
   build: {
