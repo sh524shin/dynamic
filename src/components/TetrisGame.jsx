@@ -95,8 +95,9 @@ function reducer(state, action) {
       const rowsRemaining = newGrid.filter(row => !row.every(c => c !== 0));
       const linesCleared = ROWS - rowsRemaining.length;
       const finalGrid = [...Array.from({ length: linesCleared }, () => Array(COLS).fill(0)), ...rowsRemaining];
-      const p = [0, 100, 300, 500, 800][linesCleared] * state.level;
-      const newScore = state.score + p;
+      // 줄 수만큼 곱해서 점수 부여 (예: 2줄이면 300 * 2 = 600점, 4줄이면 800 * 4 = 3200점)
+      const earnedPoints = [0, 100, 300, 500, 800][linesCleared] * linesCleared * state.level;
+      const newScore = state.score + earnedPoints;
       const newLevel = Math.floor(newScore / 1000) + 1;
       return reducer({ 
         ...state, 

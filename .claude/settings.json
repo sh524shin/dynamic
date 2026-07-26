@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"process.stdin.resume();let d='';process.stdin.on('data',x=>d+=x);process.stdin.on('end',()=>{try{const f=JSON.parse(d).tool_input.file_path;if(f&&f.endsWith('server.js')){require('child_process').execSync('node verify-realtime.js',{cwd:'C:/Users/s525h/.gemini/antigravity/simple-service',stdio:'inherit'})}}catch(e){}})\" 2>/dev/null || true",
+            "async": true,
+            "statusMessage": "Verifying real-time system (server.js changed)..."
+          }
+        ]
+      }
+    ]
+  }
+}

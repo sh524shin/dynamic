@@ -1,10 +1,11 @@
 import React, { useState, useReducer, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calculator, Book, Activity, Home, Gamepad2, Play, Pause, RotateCcw, Trophy, ArrowRight, ArrowDown, ArrowLeft, ChevronsDown } from 'lucide-react';
+import { Calculator, Book, Activity, Home, Gamepad2, Crown, Play, Pause, RotateCcw, Trophy, ArrowRight, ArrowDown, ArrowLeft, ChevronsDown } from 'lucide-react';
 import { io } from 'socket.io-client';
 import { InlineMath, BlockMath } from 'react-katex';
 import SineGrapher from './components/SineGrapher';
 import FormulaSection from './components/FormulaSection';
+import ChessGame from './components/ChessGame';
 
 // --- VERSION TIMESTAMP ---
 const VERSION = "2026.04.11.08:23 - Force Arcade Fix";
@@ -85,7 +86,9 @@ function gameReducer(state, action) {
       const remaining = newGrid.filter(row => !row.every(cell => cell !== 0));
       const cleared = ROWS - remaining.length;
       const finalGrid = [...Array.from({ length: cleared }, () => Array(COLS).fill(0)), ...remaining];
-      const newScore = state.score + [0, 100, 300, 500, 800][cleared] * state.level;
+      // 줄 수만큼 곱해서 점수 부여 (예: 2줄이면 300 * 2 = 600점, 4줄이면 800 * 4 = 3200점)
+      const earnedPoints = [0, 100, 300, 500, 800][cleared] * cleared * state.level;
+      const newScore = state.score + earnedPoints;
       const newLevel = Math.floor(newScore / 2000) + 1;
       return gameReducer({ ...state, grid: finalGrid, score: newScore, level: newLevel, speed: Math.max(100, INITIAL_SPEED * Math.pow(0.92, newLevel - 1)), activePiece: null }, { type: 'SPAWN' });
     case 'HARD_DROP':
@@ -361,7 +364,8 @@ function App() {
     { id: 'home', title: '', short: '홈', icon: <Home size={20} /> },
     { id: 'simulator', title: '', short: '시뮬', icon: <Activity size={20} /> },
     { id: 'formulas', title: '', short: '공식', icon: <Book size={20} /> },
-    { id: 'tetris', title: '', short: '게임', icon: <Gamepad2 size={20} /> },
+    { id: 'tetris', title: '', short: '테트', icon: <Gamepad2 size={20} /> },
+    { id: 'chess', title: '', short: '체스', icon: <Crown size={20} /> },
   ];
 
   return (
@@ -407,6 +411,11 @@ function App() {
           {activeTab === 'tetris' && (
             <motion.div key="tetris" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }} className="w-full">
               <TetrisInternal />
+            </motion.div>
+          )}
+          {activeTab === 'chess' && (
+            <motion.div key="chess" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }} className="w-full">
+              <ChessGame />
             </motion.div>
           )}
         </AnimatePresence>
