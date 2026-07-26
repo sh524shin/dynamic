@@ -4,6 +4,10 @@ on:
   push:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -22,14 +26,14 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      - name: Log into OCI OCIR
+      - name: Log into GHCR
         run: |
-          echo "${{ secrets.OCI_AUTH_TOKEN }}" | docker login ${{ secrets.OCI_CLI_REGION }}.ocir.io -u ${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/${{ secrets.OCI_USERNAME }} --password-stdin
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.OCI_CLI_REGION }}.ocir.io/${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/math-web:latest .
-          docker push ${{ secrets.OCI_CLI_REGION }}.ocir.io/${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/math-web:latest
+          docker build -t ghcr.io/${{ github.repository }}/math-web:latest .
+          docker push ghcr.io/${{ github.repository }}/math-web:latest
 
   deploy:
     needs: build-and-push
@@ -42,8 +46,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            echo "${{ secrets.OCI_AUTH_TOKEN }}" | sudo docker login ${{ secrets.OCI_CLI_REGION }}.ocir.io -u ${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/${{ secrets.OCI_USERNAME }} --password-stdin
+            echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
             sudo docker stop math-web || true
             sudo docker rm math-web || true
-            sudo docker pull ${{ secrets.OCI_CLI_REGION }}.ocir.io/${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/math-web:latest
-            sudo docker run -d --name math-web -p 127.0.0.1:8081:80 --restart always ${{ secrets.OCI_CLI_REGION }}.ocir.io/${{ secrets.OCI_CLI_TENANCY_NAMESPACE }}/math-web:latest
+            sudo docker pull ghcr.io/${{ github.repository }}/math-web:latest
+            sudo docker run -d --name math-web -p 127.0.0.1:8081:80 --restart always ghcr.io/${{ github.repository }}/math-web:latest
