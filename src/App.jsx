@@ -211,20 +211,22 @@ const TetrisInternal = () => {
       {/* SCORE BAR — Optimized for narrow screens */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'minmax(70px, 1fr) auto minmax(70px, 1fr)',
+        gridTemplateColumns: 'auto 1fr auto',
         alignItems: 'center',
-        height: '44px',
+        height: '56px',
         flexShrink: 0,
-        padding: '0 8px',
+        padding: '0 12px',
         backgroundColor: 'rgba(15,23,42,0.95)',
-        borderBottom: '1px solid rgba(255,255,255,0.05)'
+        borderBottom: '1px solid rgba(255,255,255,0.05)',
+        gap: '12px'
       }}>
         {/* Left: current score + level */}
-        <div className="flex items-center gap-1.5 overflow-hidden">
-          <span className="text-[8px] font-black text-text-muted uppercase">SC</span>
-          <span className="text-sm font-black text-white tabular-nums">{state.score.toLocaleString()}</span>
-          <span className="text-[8px] font-black text-text-muted uppercase ml-0.5">LV</span>
-          <span className="text-sm font-black text-neon-cyan tabular-nums">{state.level ?? 1}</span>
+        <div className="flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700 shadow-inner">
+          <span className="text-xs font-black text-text-muted uppercase tracking-wider">SCORE</span>
+          <span className="text-xl font-black text-neon-cyan tabular-nums">{state.score.toLocaleString()}</span>
+          <div className="w-px h-5 bg-slate-700 mx-1"></div>
+          <span className="text-xs font-black text-text-muted uppercase tracking-wider">LV</span>
+          <span className="text-xl font-black text-white tabular-nums">{state.level ?? 1}</span>
         </div>
 
         {/* Center: best score badge (more compact) */}
